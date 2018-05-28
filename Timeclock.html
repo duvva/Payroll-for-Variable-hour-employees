@@ -199,8 +199,8 @@ calculateTotalTimePay(counter);
 	var start = document.getElementById(currentId.replace("t", "f")).value;	
       }
  	
-   document.getElementById(duration_label.replace("1", current_id_number)).innerHTML = diff(start,end,current_id_number); 
-   document.getElementById(pay_label.replace("1", current_id_number)).innerHTML = calculatePay(diff(start,end,current_id_number));
+   document.getElementById(duration_label.replace("1", current_id_number)).innerHTML = calculateTimeDifference(start,end,current_id_number); 
+   document.getElementById(pay_label.replace("1", current_id_number)).innerHTML = calculatePay(calculateTimeDifference(start,end,current_id_number));
    calculateTotalTimePay(counter); 
     });
 
@@ -254,7 +254,9 @@ document.getElementById("totalamountlblID").innerHTML = "Total Amount :" +totalA
 
 document.getElementById("totalhourslblID").innerHTML = "Total Hours :" +totalHours;
 }
-function diff(start,end,current_id_number) {
+
+//Function calculate time differance of start and end parameters , assigns to day by using current Id.  
+function calculateTimeDifference(start,end,current_id_number) {
 	
      start = start.split(":");
     end = end.split(":");
@@ -282,10 +284,14 @@ function diff(start,end,current_id_number) {
  }
 	
 var finalResult =(hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
- if(finalResult == "NaN:NaN" || endDate.getTime() < startDate.getTime()){
+ if(finalResult == "NaN:NaN"){
   $("#TextBoxDivtime" + current_id_number).css("color", "red");
-  $("#TextBoxDivtime" + current_id_number).attr('title', 'Make day shift timings only (AM then PM )');
+  $("#TextBoxDivtime" + current_id_number).attr('title', 'Make Sure shift timings');
   return "00:00";
+ }else if(parseInt(start[0]) > parseInt(end[0])){
+  $("#TextBoxDivtime" + current_id_number).css("color", "red");
+  $("#TextBoxDivtime" + current_id_number).attr('title', 'Make Sure shift timings');
+  return finalResult;
  }else{
    $("#TextBoxDivtime" + current_id_number).css("color", "black");
    $("#TextBoxDivtime" + current_id_number).removeAttr( "title" );
